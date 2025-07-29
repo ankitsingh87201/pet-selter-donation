@@ -24,7 +24,7 @@ const Donate = () => {
         currency: order.currency,
         name: "Pet Shelter Donation",
         description: "Thank you for your support!",
-        image: "https://your-logo-url.com", // optional
+        
         order_id: order.id,
         handler: async function (response) {
           alert("Payment Successful!");
