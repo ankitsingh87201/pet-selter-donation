@@ -95,43 +95,47 @@ const Home = () => {
           Share this campaign
         </p>
 
-        <div className="flex justify-center space-x-3 text-lg sm:text-xl">
-  <a
-    href="https://www.facebook.com/"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Facebook"
-  >
-    <i className="fab fa-facebook-f text-blue-600 cursor-pointer"></i>
-  </a>
+        <div className="flex justify-center space-x-3 text-lg sm:text-xl relative z-20">
+          <a
+            href="https://www.facebook.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            className="z-30"
+          >
+            <i className="fab fa-facebook-f text-blue-600 cursor-pointer"></i>
+          </a>
 
-  <a
-    href="https://wa.me/919511576324"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="WhatsApp"
-  >
-    <i className="fab fa-whatsapp text-green-500 cursor-pointer"></i>
-  </a>
+          <a
+            href="https://wa.me/919511576324"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="WhatsApp"
+            className="z-30"
+          >
+            <i className="fab fa-whatsapp text-green-500 cursor-pointer"></i>
+          </a>
 
-  <a
-    href="https://x.com/"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Twitter"
-  >
-    <i className="fab fa-twitter text-sky-500 cursor-pointer"></i>
-  </a>
+          <a
+            href="https://x.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+            className="z-30"
+          >
+            <i className="fab fa-twitter text-sky-500 cursor-pointer"></i>
+          </a>
 
-  <a
-    href="mailto:ankitsingh87201@gmail.com"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Email"
-  >
-    <i className="fas fa-envelope text-red-500 cursor-pointer"></i>
-  </a>
-</div>
+          <a
+            href="mailto:ankitsingh87201@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Email"
+            className="z-30"
+          >
+            <i className="fas fa-envelope text-red-500 cursor-pointer"></i>
+          </a>
+        </div>
 
         <p className="text-xs text-gray-400 mt-2">Every share can bring Rs.3000</p>
       </div>
