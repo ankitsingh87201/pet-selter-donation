@@ -11,12 +11,7 @@ import contactRoute from "./routes/contactRoutes.js";
 // Load environment variables
 dotenv.config();
 
-// Enable CORS for frontend domain
-app.use(cors({
-  origin: "https://pet-selter-donation-frontend.onrender.com",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-}));
+
 
 if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_SECRET) {
   console.error("Missing Razorpay environment variables.");
@@ -26,8 +21,14 @@ if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_SECRET) {
 // Init Express
 const app = express();
 
+// Enable CORS for frontend domain
+app.use(cors({
+  origin: "https://pet-selter-donation-frontend.onrender.com",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}));
+
 // Middleware
-app.use(cors());
 app.use(express.json());
 
 // Routes
