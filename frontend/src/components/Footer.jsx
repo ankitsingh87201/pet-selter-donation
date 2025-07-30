@@ -13,6 +13,15 @@ const Footer = () => {
       </div>
       <br />
       <p>© {currentYear} Pet Shelter. All rights reserved.</p>
+       <span>created by-</span>
+        <a
+          href="https://www.instagram.com/im._.ankiiit?igsh=MjJjczVjYWtzNHdh"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:underline"
+        >
+          <span>im._.ankiiit</span>
+        </a>
       
     </footer>
   );
