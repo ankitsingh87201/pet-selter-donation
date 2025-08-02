@@ -11,7 +11,7 @@ const DonationForm = () => {
     message: "",
   });
 
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -19,7 +19,7 @@ const DonationForm = () => {
   };
 
   const handleDonate = async () => {
-    if (loading) return; 
+    if (loading) return;
     setLoading(true);
 
     try {
@@ -38,13 +38,10 @@ const DonationForm = () => {
         return;
       }
 
-       // Step 1: Create Razorpay order (amount in paise)
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`,
-        {
-          amount: Number(form.amount) * 100,
-        }
-      );
+      // Step 1: Create Razorpay order
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`, {
+        amount: Number(form.amount) * 100,
+      });
 
       const order = data?.order || data;
 
@@ -54,8 +51,7 @@ const DonationForm = () => {
         return;
       }
 
-
-         // Step 2: Setup Razorpay options
+      // Step 2: Setup Razorpay options
       const options = {
         key: razorpayKey,
         amount: order.amount,
@@ -65,7 +61,6 @@ const DonationForm = () => {
         order_id: order.id,
         handler: async function (response) {
           try {
-
             // Step 3: Verify payment
             await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/payment/verify`, {
               razorpay_order_id: response.razorpay_order_id,
@@ -80,7 +75,7 @@ const DonationForm = () => {
               },
             });
 
-             // Save donation to backend (optional - if not already in /verify)
+            // Optional: Save donation details
             await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/donations`, {
               ...form,
               amount: order.amount,
@@ -111,7 +106,7 @@ const DonationForm = () => {
             console.error("Payment verification failed:", error);
             alert("Payment was successful, but verification failed.");
           } finally {
-            setLoading(false); 
+            setLoading(false);
           }
         },
         prefill: {
@@ -122,7 +117,7 @@ const DonationForm = () => {
         theme: { color: "#1abc9c" },
         modal: {
           ondismiss: () => {
-            setLoading(false); 
+            setLoading(false);
           },
         },
       };
@@ -131,54 +126,83 @@ const DonationForm = () => {
       razorpay.open();
     } catch (error) {
       console.error("Donation error:", error);
-      alert(
-        "Something went wrong! " +
-          (error.response?.data?.message || error.message)
-      );
-      setLoading(false); 
+      alert("Something went wrong! " + (error.response?.data?.message || error.message));
+      setLoading(false);
     }
   };
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-4">Donate to Pet Shelter</h2>
-      <input
-        name="name"
-        value={form.name}
-        onChange={handleChange}
-        placeholder="Your Name"
-        className="input border p-2 mb-3 w-full"
-      />
-      <input
-        name="email"
-        value={form.email}
-        onChange={handleChange}
-        placeholder="Email"
-        className="input border p-2 mb-3 w-full"
-      />
-      <input
-        name="phone"
-        value={form.phone}
-        onChange={handleChange}
-        placeholder="Phone"
-        className="input border p-2 mb-3 w-full"
-      />
-      <input
-        name="amount"
-        value={form.amount}
-        onChange={handleChange}
-        placeholder="Amount (₹)"
-        type="number"
-        min="1"
-        className="input border p-2 mb-3 w-full"
-      />
-      <textarea
-        name="message"
-        value={form.message}
-        onChange={handleChange}
-        placeholder="Message (optional)"
-        className="input border p-2 mb-3 w-full"
-      />
+
+      <label className="block mb-3 text-sm font-medium text-gray-700">
+        Name
+        <input
+          required
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          placeholder="Your Name"
+          autoComplete="name"
+          className="input border p-2 mt-1 w-full"
+        />
+      </label>
+
+      <label className="block mb-3 text-sm font-medium text-gray-700">
+        Email
+        <input
+          required
+          name="email"
+          type="email"
+          value={form.email}
+          onChange={handleChange}
+          placeholder="Email"
+          autoComplete="email"
+          className="input border p-2 mt-1 w-full"
+        />
+      </label>
+
+      <label className="block mb-3 text-sm font-medium text-gray-700">
+        Phone
+        <input
+          required
+          name="phone"
+          type="tel"
+          value={form.phone}
+          onChange={handleChange}
+          placeholder="Phone"
+          autoComplete="tel"
+          className="input border p-2 mt-1 w-full"
+        />
+      </label>
+
+      <label className="block mb-3 text-sm font-medium text-gray-700">
+        Amount (₹)
+        <input
+          required
+          name="amount"
+          type="number"
+          min="1"
+          value={form.amount}
+          onChange={handleChange}
+          placeholder="Amount in ₹"
+          autoComplete="off"
+          className="input border p-2 mt-1 w-full"
+        />
+      </label>
+
+      <label className="block mb-3 text-sm font-medium text-gray-700">
+        Message (optional)
+        <textarea
+          name="message"
+          value={form.message}
+          onChange={handleChange}
+          placeholder="Message"
+          rows={3}
+          className="input border p-2 mt-1 w-full"
+        />
+      </label>
+
       <button
         onClick={handleDonate}
         disabled={loading}
