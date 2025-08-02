@@ -11,6 +11,7 @@ const DonationForm = () => {
     message: "",
   });
 
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -18,21 +19,26 @@ const DonationForm = () => {
   };
 
   const handleDonate = async () => {
+    if (loading) return; 
+    setLoading(true);
+
     try {
       const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
       const backendURL = import.meta.env.VITE_BACKEND_URL;
 
-      if (!razorpayKey || !backendURL) {
+      if (!razorpayKey || !import.meta.env.VITE_BACKEND_URL) {
         alert("Missing environment variables.");
+        setLoading(false);
         return;
       }
 
       if (!form.amount || form.amount <= 0) {
         alert("Please enter a valid donation amount.");
+        setLoading(false);
         return;
       }
 
-      // Step 1: Create Razorpay order (amount in paise)
+       // Step 1: Create Razorpay order (amount in paise)
       const { data } = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`,
         {
@@ -44,10 +50,12 @@ const DonationForm = () => {
 
       if (!order?.id) {
         alert("Failed to create order. Please try again.");
+        setLoading(false);
         return;
       }
 
-      // Step 2: Setup Razorpay options
+
+         // Step 2: Setup Razorpay options
       const options = {
         key: razorpayKey,
         amount: order.amount,
@@ -57,35 +65,30 @@ const DonationForm = () => {
         order_id: order.id,
         handler: async function (response) {
           try {
-            // Step 3: Verify payment
-            await axios.post(
-              `${import.meta.env.VITE_BACKEND_URL}/api/payment/verify`,
-              {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                donationData: {
-                  name: form.name,
-                  email: form.email,
-                  phone: form.phone,
-                  amount: order.amount, 
-                  message: form.message,
-                },
-              }
-            );
 
-            // Save donation to backend (optional - if not already in /verify)
-            await axios.post(
-              `${import.meta.env.VITE_BACKEND_URL}/api/donations`,
-              {
-                ...form,
+            // Step 3: Verify payment
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/payment/verify`, {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              donationData: {
+                name: form.name,
+                email: form.email,
+                phone: form.phone,
                 amount: order.amount,
-                paymentMethod: "Razorpay",
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-              }
-            );
+                message: form.message,
+              },
+            });
+
+             // Save donation to backend (optional - if not already in /verify)
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/donations`, {
+              ...form,
+              amount: order.amount,
+              paymentMethod: "Razorpay",
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
 
             const details = {
               orderId: response.razorpay_order_id,
@@ -107,6 +110,8 @@ const DonationForm = () => {
           } catch (error) {
             console.error("Payment verification failed:", error);
             alert("Payment was successful, but verification failed.");
+          } finally {
+            setLoading(false); 
           }
         },
         prefill: {
@@ -115,6 +120,11 @@ const DonationForm = () => {
           contact: form.phone,
         },
         theme: { color: "#1abc9c" },
+        modal: {
+          ondismiss: () => {
+            setLoading(false); 
+          },
+        },
       };
 
       const razorpay = new window.Razorpay(options);
@@ -125,6 +135,7 @@ const DonationForm = () => {
         "Something went wrong! " +
           (error.response?.data?.message || error.message)
       );
+      setLoading(false); 
     }
   };
 
@@ -170,9 +181,14 @@ const DonationForm = () => {
       />
       <button
         onClick={handleDonate}
-        className="w-full border border-orange-500 text-orange-500 py-2 rounded-full text-sm font-semibold cursor-pointer hover:bg-orange-500 hover:text-white transition-colors"
+        disabled={loading}
+        className={`w-full border py-2 rounded-full text-sm font-semibold transition-colors ${
+          loading
+            ? "bg-orange-300 text-white cursor-not-allowed"
+            : "border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white cursor-pointer"
+        }`}
       >
-        Donate Now 🙌
+        {loading ? "Processing..." : "Donate Now 🙌"}
       </button>
     </div>
   );
