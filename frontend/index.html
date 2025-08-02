@@ -2,24 +2,44 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/logo1.png" />
-    <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  integrity="sha512-..."
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/logo1.png" />
+
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-..."
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Viewport (Responsive) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Razorpay Script -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- SEO Meta Tags -->
+    <meta name="title" content="Pet Shelter – Donate & Support Animals" />
+    <meta name="description" content="Help animals in need by donating to our pet shelter. Your small contribution makes a big difference!" />
+    <meta name="keywords" content="Pet shelter, animal donation, support animals, animal care, Razorpay donation" />
+    <meta name="author" content="Your Name or NGO Name" />
+
+    <!-- Social Share  -->
+    <meta property="og:title" content="Pet Shelter – Donate & Support Animals" />
+    <meta property="og:description" content="Help animals in need by donating to our pet shelter. Your small contribution makes a big difference!" />
+    <meta property="og:image" content="/logo1.png" />
+    <meta property="og:type" content="website" />
+
+    <!-- Razorpay Script (Preloaded) -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
 
     <title>Pet Shelter – Donate & Support Animals</title>
   </head>
+
   <body>
     <div id="root"></div>
+
+    <!-- Vite App Entry -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
