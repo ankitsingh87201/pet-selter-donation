@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, Suspense, lazy } from "react";
 import Slider from "react-slick";
 import Modal from "react-modal";
-import DonationForm from "../components/DonationForm";
 
+const DonationForm = lazy(() => import("../components/DonationForm"));
 import banner1 from "../assets/images/donte_make_diffrence.png";
 import banner2 from "../assets/images/cow_shelter.png";
 import banner3 from "../assets/images/cow_eat.png";
@@ -40,6 +40,7 @@ const Home = () => {
             <div key={idx}>
               <div className="relative w-full h-72 sm:h-96 md:h-[500px] overflow-hidden">
                 <img
+                  loading="lazy"
                   src={img}
                   alt={`Banner ${idx + 1}`}
                   className="w-full h-full object-cover"
@@ -68,7 +69,9 @@ const Home = () => {
 
       {/*  Donation Box */}
       <div className="max-w-md mx-auto -mt-14 sm:-mt-16 z-10 relative bg-white border rounded-xl shadow-lg p-5 sm:p-6 text-center">
-        <h2 className="font-logo text-xl sm:text-2xl text-gray-700 mb-2">Pet Shelter</h2>
+        <h2 className="font-logo text-xl sm:text-2xl text-gray-700 mb-2">
+          Pet Shelter
+        </h2>
         <button className="border border-blue-500 text-blue-500 px-3 py-1 rounded-full text-xs sm:text-sm mb-3">
           80G Tax Benefits
         </button>
@@ -137,22 +140,36 @@ const Home = () => {
           </a>
         </div>
 
-        <p className="text-xs text-gray-400 mt-2">Every share can bring Rs.3000</p>
+        <p className="text-xs text-gray-400 mt-2">
+          Every share can bring Rs.3000
+        </p>
       </div>
 
       {/* Impact Stats */}
       <div className="max-w-6xl mx-auto mt-16 sm:mt-20 px-2 sm:px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 text-center">
         <div className="bg-white shadow p-4 sm:p-6 rounded-lg">
-          <h3 className="text-orange-600 font-bold text-lg sm:text-xl mb-2">Rs.500</h3>
-          <p className="text-gray-700 text-sm sm:text-base">Feeds 5 dogs for a week</p>
+          <h3 className="text-orange-600 font-bold text-lg sm:text-xl mb-2">
+            Rs.500
+          </h3>
+          <p className="text-gray-700 text-sm sm:text-base">
+            Feeds 5 dogs for a week
+          </p>
         </div>
         <div className="bg-white shadow p-4 sm:p-6 rounded-lg">
-          <h3 className="text-orange-600 font-bold text-lg sm:text-xl mb-2">Rs.2000</h3>
-          <p className="text-gray-700 text-sm sm:text-base">Covers one dog's medical treatment</p>
+          <h3 className="text-orange-600 font-bold text-lg sm:text-xl mb-2">
+            Rs.2000
+          </h3>
+          <p className="text-gray-700 text-sm sm:text-base">
+            Covers one dog's medical treatment
+          </p>
         </div>
         <div className="bg-white shadow p-4 sm:p-6 rounded-lg">
-          <h3 className="text-orange-600 font-bold text-lg sm:text-xl mb-2">Rs.10,000</h3>
-          <p className="text-gray-700 text-sm sm:text-base">Helps build kennel infrastructure</p>
+          <h3 className="text-orange-600 font-bold text-lg sm:text-xl mb-2">
+            Rs.10,000
+          </h3>
+          <p className="text-gray-700 text-sm sm:text-base">
+            Helps build kennel infrastructure
+          </p>
         </div>
       </div>
 
@@ -167,7 +184,9 @@ const Home = () => {
           ❤️ Make a Donation
         </h2>
 
-        <DonationForm />
+        <Suspense fallback={<div className="text-center">Loading form...</div>}>
+          <DonationForm />
+        </Suspense>
       </div>
     </div>
   );
